@@ -1,9 +1,13 @@
 package SRMovieDB.Controller;
 
+import SRMovieDB.ML.MovieML;
+import SRMovieDB.ML.MovieResponse;
 import SRMovieDB.ML.UserML;
 import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -26,13 +30,27 @@ public class MovieController {
     public String Index(HttpSession session) {
         String session_id = (String) session.getAttribute("session_id");
         if (session_id != null) {
-            
+
             RestTemplate restTemplate = new RestTemplate();
-            
+
             HttpHeaders headers = new HttpHeaders();
-            
+
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.setBearerAuth(token);
+
+            HttpEntity<String> requestEntity = new HttpEntity(headers);
+
+            ResponseEntity<MovieResponse> response
+                    = restTemplate.exchange(
+                            "https://api.themoviedb.org/3/movie/popular",
+                            HttpMethod.GET,
+                            requestEntity,
+                            new ParameterizedTypeReference<MovieResponse>() {
+                    });
+            MovieResponse body = response.getBody();
+            List<MovieML> movies = body.getResults();
+            
+            System.out.println(movies);
             
             
             
