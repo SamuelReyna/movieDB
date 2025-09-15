@@ -1,0 +1,73 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Inicio de sesión</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- TailwindCSS CDN -->
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+
+    <!-- Importar Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <header>
+        <!-- Navbar con Tailwind -->
+        <nav class="bg-[#2c3338] text-[#eee] shadow-md">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16 items-center">
+
+                    <!-- Logo -->
+                    <div class="flex items-center">
+                        <a href="/movie" class="flex items-center text-xl font-bold hover:text-[#ea4c88] transition">
+                            <i class="bi bi-film mr-2"></i>
+                            MovieDB
+                        </a>
+                    </div>
+
+                    <!-- Links -->
+                    <div class="flex items-center space-x-4">
+
+                        <!-- Inicio -->
+                        <a href="/movie" 
+                           class="flex items-center bg-[#3b4148] px-3 py-2 rounded-lg hover:bg-[#434a52] hover:text-[#ea4c88] transition">
+                            <i class="bi bi-house-door-fill mr-1"></i>
+                            Inicio
+                        </a>
+
+                        <!-- Perfil con Dropdown -->
+                        <div class="relative group">
+                            <button 
+                                class="flex items-center bg-[#3b4148] px-3 py-2 rounded-lg hover:bg-[#434a52] hover:text-[#ea4c88] transition focus:outline-none">
+                                <i class="bi bi-person-circle mr-1"></i>
+                                Perfil
+                                <i class="bi bi-caret-down-fill ml-1 text-xs"></i>
+                            </button>
+
+                            <!-- Dropdown -->
+                            <div
+                                class="absolute hidden group-hover:block bg-[#3b4148] text-sm rounded-lg shadow-lg mt-2 w-40 z-50">
+                                <a href="/perfil/detalles"
+                                   class="block px-4 py-2 rounded-lg hover:bg-[#434a52] hover:text-[#ea4c88] transition">
+                                    <i class="bi bi-info-circle-fill mr-2"></i> Detalles
+                                </a>
+                                <a href="/perfil/favoritas"
+                                   class="block px-4 py-2 rounded-lg hover:bg-[#434a52] hover:text-[#ea4c88] transition">
+                                    <i class="bi bi-heart-fill mr-2"></i> Favoritas
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Logout como link -->
+                        <a th:href="@{movie/logout}"
+                           class="flex items-center bg-[#3b4148] px-3 py-2 rounded-lg hover:bg-[#434a52] hover:text-[#ea4c88] transition">
+                            <i class="bi bi-box-arrow-right mr-1"></i>
+                            Cerrar sesión
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <body  class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900"  layout:fragment="body">
+        hola
+    </body>
+</html>

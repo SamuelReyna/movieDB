@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Inicio de sesión</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- TailwindCSS CDN -->
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
+
+        <div class="w-full max-w-md bg-gray-800 rounded-2xl shadow-lg p-8">
+            <!-- Título -->
+            <h2 class="text-2xl font-bold text-center text-white mb-6">Iniciar sesión</h2>
+
+            <!-- Formulario -->
+            <form method="POST" th:object="${user}" th:action="@{/movie/auth}" class="space-y-6">
+                <!-- Usuario -->
+                <div>
+                    <label for="login__username" class="block text-sm font-medium text-gray-300 mb-1">Usuario</label>
+                    <input th:field="*{Username}" autocomplete="username" id="login__username" type="text" 
+                           name="username" placeholder="Ingresa tu usuario"
+                           class="w-full rounded-lg bg-gray-700 text-gray-200 px-4 py-2 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition" required>
+                </div>
+
+                <!-- Contraseña -->
+                <div>
+                    <label for="login__password" class="block text-sm font-medium text-gray-300 mb-1">Contraseña</label>
+                    <input th:field="*{Password}" id="login__password" type="password" name="password" 
+                           placeholder="Ingresa tu contraseña"
+                           class="w-full rounded-lg bg-gray-700 text-gray-200 px-4 py-2 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition" required>
+                </div>
+
+                <!-- Botón -->
+                <div>
+                    <input type="submit" value="Ingresar"
+                           class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 rounded-lg transition cursor-pointer">
+                </div>
+            </form>
+
+            <!-- Footer -->
+            <p class="mt-6 text-center text-sm text-gray-400">
+                ¿No tienes cuenta? <a href="#" class="text-pink-500 hover:underline">Regístrate</a>
+            </p>
+        </div>
+    </body>
+</html>
