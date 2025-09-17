@@ -1,54 +1,32 @@
 package SRMovieDB.ML;
 
+import SRMovieDB.ML.MovieML;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class MovieResponse {
-
     private int page;
     private List<MovieML> results;
-    private int total_pages;
-    private int total_results;
 
-    public MovieResponse(int page, List<MovieML> results, int total_pages, int total_results) {
-        this.page = page;
-        this.results = results;
-        this.total_pages = total_pages;
-        this.total_results = total_results;
-    }
+    @JsonProperty("total_pages")
+    private int totalPages;
 
-    public int getTotal_pages() {
-        return total_pages;
-    }
+    @JsonProperty("total_results")
+    private int totalResults;
 
-    public void setTotal_pages(int total_pages) {
-        this.total_pages = total_pages;
-    }
+    // Constructores
+    public MovieResponse() {}
 
-    public int getTotal_results() {
-        return total_results;
-    }
+    // Getters y Setters
+    public int getPage() { return page; }
+    public void setPage(int page) { this.page = page; }
 
-    public void setTotal_results(int total_results) {
-        this.total_results = total_results;
-    }
+    public List<MovieML> getResults() { return results; }
+    public void setResults(List<MovieML> results) { this.results = results; }
 
-    public MovieResponse() {
-    }
+    public int getTotalPages() { return totalPages; }
+    public void setTotalPages(int totalPages) { this.totalPages = totalPages; }
 
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    public List<MovieML> getResults() {
-        return results;
-    }
-
-    public void setResults(List<MovieML> results) {
-        this.results = results;
-    }
-
+    public int getTotalResults() { return totalResults; }
+    public void setTotalResults(int totalResults) { this.totalResults = totalResults; }
 }

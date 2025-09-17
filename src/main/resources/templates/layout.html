@@ -27,30 +27,30 @@
                     <div class="flex items-center space-x-4">
 
                         <!-- Inicio -->
-                        <a href="/movie" 
-                           class="flex items-center bg-[#3b4148] px-3 py-2 rounded-lg hover:bg-[#434a52] hover:text-[#ea4c88] transition">
-                            <i class="bi bi-house-door-fill mr-1"></i>
-                            Inicio
-                        </a>
+<!--                        <a href="/movie" -->
+<!--                           class="flex items-center bg-[#3b4148] px-3 py-2 rounded-lg hover:bg-[#434a52] hover:text-[#ea4c88] transition">-->
+<!--                            <i class="bi bi-house-door-fill mr-1"></i>-->
+<!--                            Inicio-->
+<!--                        </a>-->
 
                         <!-- Perfil con Dropdown -->
                         <div class="relative group">
-                            <button 
-                                class="flex items-center bg-[#3b4148] px-3 py-2 rounded-lg hover:bg-[#434a52] hover:text-[#ea4c88] transition focus:outline-none">
+                            <button class="flex items-center bg-[#3b4148] px-3 py-2 rounded-lg hover:bg-[#434a52] hover:text-[#ea4c88] transition focus:outline-none text-white">
                                 <i class="bi bi-person-circle mr-1"></i>
                                 Perfil
                                 <i class="bi bi-caret-down-fill ml-1 text-xs"></i>
                             </button>
 
-                            <!-- Dropdown -->
-                            <div
-                                class="absolute hidden group-hover:block bg-[#3b4148] text-sm rounded-lg shadow-lg mt-2 w-40 z-50">
+                            <!-- Dropdown mejorado - Clave: invisible/visible en lugar de hidden/block -->
+                            <div class="absolute invisible opacity-0 group-hover:visible group-hover:opacity-100
+                        bg-[#3b4148] text-sm rounded-lg shadow-lg mt-2 w-40 z-50
+                        transition-all duration-200 ease-in-out">
                                 <a href="/perfil/detalles"
-                                   class="block px-4 py-2 rounded-lg hover:bg-[#434a52] hover:text-[#ea4c88] transition">
+                                   class="block px-4 py-2 rounded-lg hover:bg-[#434a52] hover:text-[#ea4c88] transition text-white">
                                     <i class="bi bi-info-circle-fill mr-2"></i> Detalles
                                 </a>
                                 <a href="/perfil/favoritas"
-                                   class="block px-4 py-2 rounded-lg hover:bg-[#434a52] hover:text-[#ea4c88] transition">
+                                   class="block px-4 py-2 rounded-lg hover:bg-[#434a52] hover:text-[#ea4c88] transition text-white">
                                     <i class="bi bi-heart-fill mr-2"></i> Favoritas
                                 </a>
                             </div>
@@ -67,7 +67,9 @@
             </div>
         </nav>
     </header>
+
     <body  class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900"  layout:fragment="body">
         hola
+
     </body>
 </html>

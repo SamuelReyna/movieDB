@@ -27,7 +27,7 @@ public class MovieController {
     private final String token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwOTg2ZmY4NzM0Y2YyMDI4NWFkNzBiNjJlODZmYzY0NSIsIm5iZiI6MTc1NzcwMzIyNC45NTcsInN1YiI6IjY4YzQ2YzM4YTlmYjViODI3NjhkNzNjYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.H8LWQFVeOAKNZZ00HhZCIYChFfrsT3_paRZZpevGlu8";
 
     @GetMapping()
-    public String Index(HttpSession session) {
+    public String Index(HttpSession session, Model model) {
         String session_id = (String) session.getAttribute("session_id");
         if (session_id != null) {
 
@@ -49,9 +49,8 @@ public class MovieController {
                     });
             MovieResponse body = response.getBody();
             List<MovieML> movies = body.getResults();
-            
-            System.out.println(movies);
-            
+            model.addAttribute("movies", movies);
+
             
             
             
@@ -104,10 +103,10 @@ public class MovieController {
                             HttpMethod.POST,
                             requestEntity,
                             HashMap.class);
-            HashMap<String, Object> responseBody = new HashMap();
+            HashMap<String, Object> responseBody;
             responseBody = responseEntity.getBody();
             if (responseBody != null && Boolean.TRUE.equals(responseBody.get("success"))) {
-                HashMap<String, Object> bodySesion = new HashMap();
+                HashMap<String, Object> bodySesion = new HashMap<>();
                 bodySesion.put("request_token", requestToken);
                 HttpEntity<String> requestSession = new HttpEntity(bodySesion, headers);
 
