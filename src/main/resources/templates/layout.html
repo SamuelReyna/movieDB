@@ -1,17 +1,22 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>Inicio de sesión</title>
+        <title>TheMovieDBapi</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <!-- TailwindCSS CDN -->
         <script src="https://cdn.tailwindcss.com"></script>
+         <script
+            src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+            crossorigin="anonymous"
+        ></script>
     </head>
 
     <!-- Importar Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <header>
         <!-- Navbar con Tailwind -->
-        <nav class="bg-[#2c3338] text-[#eee] shadow-md">
+        <nav class="bg-gray-800 text-[#eee] shadow-md">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16 items-center">
 
@@ -37,27 +42,25 @@
                         <div class="relative group">
                             <button class="flex items-center bg-[#3b4148] px-3 py-2 rounded-lg hover:bg-[#434a52] hover:text-[#ea4c88] transition focus:outline-none text-white">
                                 <i class="bi bi-person-circle mr-1"></i>
-                                Perfil
+                                <span ></span>Perfil
                                 <i class="bi bi-caret-down-fill ml-1 text-xs"></i>
                             </button>
 
-                            <!-- Dropdown mejorado - Clave: invisible/visible en lugar de hidden/block -->
                             <div class="absolute invisible opacity-0 group-hover:visible group-hover:opacity-100
                         bg-[#3b4148] text-sm rounded-lg shadow-lg mt-2 w-40 z-50
                         transition-all duration-200 ease-in-out">
-                                <a href="/perfil/detalles"
+                                <a th:href="@{/movie/profile/details}"
                                    class="block px-4 py-2 rounded-lg hover:bg-[#434a52] hover:text-[#ea4c88] transition text-white">
                                     <i class="bi bi-info-circle-fill mr-2"></i> Detalles
                                 </a>
-                                <a href="/perfil/favoritas"
+                                <a th:href="@{/movie/profile/favorites}"
                                    class="block px-4 py-2 rounded-lg hover:bg-[#434a52] hover:text-[#ea4c88] transition text-white">
                                     <i class="bi bi-heart-fill mr-2"></i> Favoritas
                                 </a>
                             </div>
                         </div>
 
-                        <!-- Logout como link -->
-                        <a th:href="@{movie/logout}"
+                        <a th:href="@{/movie/logout}"
                            class="flex items-center bg-[#3b4148] px-3 py-2 rounded-lg hover:bg-[#434a52] hover:text-[#ea4c88] transition">
                             <i class="bi bi-box-arrow-right mr-1"></i>
                             Cerrar sesión

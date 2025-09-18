@@ -14,10 +14,8 @@ public class MovieResponse {
     @JsonProperty("total_results")
     private int totalResults;
 
-    // Constructores
     public MovieResponse() {}
 
-    // Getters y Setters
     public int getPage() { return page; }
     public void setPage(int page) { this.page = page; }
 

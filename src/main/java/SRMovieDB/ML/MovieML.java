@@ -33,8 +33,17 @@ public class MovieML {
     private String language;
     private double popularity;
     private boolean video;
+    private boolean favorite;
 
-    public MovieML(int voteCount, double voteAverage, boolean video, String title, String releaseDate, String posterPath, double popularity, String overview, String language, int id, List<Integer> genreIds, String backdropPath, boolean adult) {
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
+    public MovieML(int voteCount, double voteAverage, boolean video, String title, String releaseDate, String posterPath, double popularity, String overview, String language, int id, List<Integer> genreIds, String backdropPath, boolean adult, boolean favorite) {
         this.voteCount = voteCount;
         this.voteAverage = voteAverage;
         this.video = video;
@@ -48,6 +57,7 @@ public class MovieML {
         this.genreIds = genreIds;
         this.backdropPath = backdropPath;
         this.adult = adult;
+        this.favorite = favorite;
     }
 
     public boolean isAdult() {

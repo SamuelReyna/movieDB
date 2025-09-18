@@ -1,0 +1,96 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+    <body   layout:fragment="body">
+
+        <div class="min-h-screen flex items-center justify-center p-4">
+            <div class="bg-gray-800 rounded-2xl shadow-xl max-w-md w-full p-8 text-white border border-gray-700">
+
+                <!-- Imagen de Avatar -->
+                <div class="flex justify-center mb-6">
+                    <img th:if="${details.avatar != null and details.avatar.gravatar != null}" 
+                         th:src="'https://www.gravatar.com/avatar/' + ${details.avatar.gravatar.hash} + '?s=200'" 
+                         alt="Avatar" 
+                         class="w-32 h-32 rounded-full border-4 border-pink-500 shadow-lg object-cover">
+
+                    <div th:if="${details.avatar == null or details.avatar.gravatar == null}" 
+                         class="w-32 h-32 rounded-full border-4 border-pink-500 shadow-lg bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center">
+                        <svg class="w-16 h-16 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Info principal -->
+                <h1 class="text-3xl font-bold text-center mb-2" th:text="${details.username}">Usuario</h1>
+                <div class="w-16 h-1 bg-pink-500 mx-auto mb-6 rounded-full"></div>
+
+                <!-- Detalles -->
+                <div class="space-y-4 mb-8">
+                    <div class="flex justify-between items-center bg-gray-700 p-4 rounded-xl border border-gray-600">
+                        <span class="font-semibold text-pink-400 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M7 2a1 1 0 011 1v1h3a1 1 0 110 2H9.578a18.87 18.87 0 01-1.724 4.78c.29.354.596.696.914 1.026a1 1 0 01-1.44 1.389c-.188-.196-.373-.396-.554-.6a19.098 19.098 0 01-3.107 3.567 1 1 0 01-1.334-1.49 17.087 17.087 0 003.13-3.733 18.992 18.992 0 01-1.487-2.494 1 1 0 111.79-.89c.234.47.489.928.764 1.372.417-.934.752-1.913.997-2.927H3a1 1 0 110-2h3V3a1 1 0 011-1zm6 6a1 1 0 01.894.553l2.991 5.982a.869.869 0 01.02.037l.99 1.98A1 1 0 0117 18H7.618a1 1 0 01-.894-1.447l.583-1.167a1 1 0 011.412-.894l.093.7a1 1 0 001.492.832l.149-1.183a1 1 0 011.816-.464l.593 2.377a1 1 0 001.933-.516l-.686-2.744a1 1 0 011.79-.89l.818 1.637a1 1 0 10.894-.553z" clip-rule="evenodd"></path>
+                            </svg>
+                            Idioma:
+                        </span>
+                        <span class="font-mono text-gray-300" th:text="${details.iso_639_1}">es</span>
+                    </div>
+
+                    <div class="flex justify-between items-center bg-gray-700 p-4 rounded-xl border border-gray-600">
+                        <span class="font-semibold text-pink-400 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                            </svg>
+                            País:
+                        </span>
+                        <span class="font-mono text-gray-300" th:text="${details.iso_3166_1}">MX</span>
+                    </div>
+
+                    <div class="flex justify-between items-center bg-gray-700 p-4 rounded-xl border border-gray-600">
+                        <span class="font-semibold text-pink-400 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                            </svg>
+                            Nombre:
+                        </span>
+                        <span class="text-gray-300" th:text="${details.name != null and details.name != '' ? details.name : 'Sin especificar'}">Sin especificar</span>
+                    </div>
+
+                    <div class="flex justify-between items-center bg-gray-700 p-4 rounded-xl border border-gray-600">
+                        <span class="font-semibold text-pink-400 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Contenido adulto:
+                        </span>
+                        <span class="text-gray-300" th:text="${details.include_adult} ? 'Permitido' : 'No permitido'">No permitido</span>
+                    </div>
+                </div>
+
+                <!-- Botón de Favoritos -->
+                <div class="text-center">
+                    <a tH:href="@{/movie/profile/favorites}" 
+                       class="inline-flex items-center justify-center w-full bg-gradient-to-r from-pink-600 to-pink-700 hover:from-pink-700 hover:to-pink-800 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                        </svg>
+                        Ver Mis Favoritos
+                    </a>
+                </div>
+
+                <!-- Botón secundario opcional -->
+                <div class="text-center mt-4">
+                    <a th:href="@{/movie}" 
+                       class="inline-flex items-center justify-center w-full bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 border border-gray-600">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                        Volver a Películas
+                    </a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
