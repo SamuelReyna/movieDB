@@ -148,8 +148,9 @@
                                     <span class="text-gray-400 ml-1">/10</span>
                                 </div>
 
+                                <input type="hidden" id="movieId"/>
                                 <!-- Add to favorites -->
-                                <button class="w-full mt-4 bg-pink-600 hover:bg-pink-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center">
+                                <button class="heart-btn-modal w-full mt-4 bg-pink-600 hover:bg-pink-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 000-6.364 4.5 4.5 0 00-6.364 0L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                                     </svg>
@@ -227,76 +228,25 @@
                         const Token = /*[[${token}]]*/ '';
 
                         if (this.classList.contains('active')) {
-                            // 🔻 Quitar de favoritos
                             this.classList.remove('active', 'bg-pink-500', 'bg-opacity-90', 'scale-110');
                             this.classList.add('bg-black', 'bg-opacity-50');
                             heartIcon.setAttribute('fill', 'none');
                             heartIcon.setAttribute('stroke', 'currentColor');
                             heartIcon.classList.remove('text-white');
                             heartIcon.classList.add('text-white', 'hover:text-pink-500');
-
-                            $.ajax({
-                                url: `https://api.themoviedb.org/3/movie/${movieId}?language=es-MX`,
-                                method: 'GET',
-                                dataType: 'json',
-                                headers: {"Authorization": `Bearer ${Token}`},
-                                success: function (data) {
-                                    console.log("Detalle película removida:", data);
-                                }
-                            });
-                            // Aquí harías el DELETE de favoritos (TMDB solo permite update con POST, usando favorite: false)
-                            $.ajax({
-                                url: `https://api.themoviedb.org/3/account/${IdAccount}/favorite`,
-                                method: 'POST',
-                                contentType: 'application/json;charset=utf-8',
-                                headers: {"Authorization": `Bearer ${Token}`},
-                                data: JSON.stringify({
-                                    media_type: "movie",
-                                    media_id: movieId,
-                                    favorite: false
-                                }),
-                                success: function (data) {
-                                    console.log("Eliminado de favoritos:", data);
-                                },
-                                error: function (xhr) {
-                                    console.error("Error al eliminar:", xhr.responseText);
-                                }
-                            });
-
+                            removeFavorite(movieId, Token, IdAccount);
                         } else {
-                            // 🔺 Agregar a favoritos
                             this.classList.add('active', 'bg-pink-500', 'bg-opacity-90', 'scale-110');
                             this.classList.remove('bg-black', 'bg-opacity-50');
                             heartIcon.setAttribute('fill', 'currentColor');
                             heartIcon.removeAttribute('stroke');
                             heartIcon.classList.remove('hover:text-pink-500');
                             heartIcon.classList.add('text-white');
-
-                            $.ajax({
-                                url: `https://api.themoviedb.org/3/account/${IdAccount}/favorite`,
-                                method: 'POST',
-                                contentType: 'application/json;charset=utf-8',
-                                dataType: 'json',
-                                headers: {"Authorization": `Bearer ${Token}`},
-                                data: JSON.stringify({
-                                    media_type: "movie",
-                                    media_id: movieId,
-                                    favorite: true
-                                }),
-                                success: function (data) {
-                                    console.log("Agregado a favoritos:", data);
-                                },
-                                error: function (xhr) {
-                                    console.error("Error al marcar favorito:", xhr.responseText);
-                                }
-                            });
+                            addFavorite(movieId, Token, IdAccount);
                         }
                     });
                 });
-            </script>
 
-
-            <script>
 
                 $(document).on("click", ".btnIdMovie", function () {
                     const IdMovie = $(this).data("movie-id");
@@ -304,6 +254,75 @@
                     $('#movieModal').removeClass('hidden');
                     loadMovieDetails(IdMovie);
                 });
+
+                $(document).on("click", ".heart-btn-modal", function () {
+                    const heartIcon = this.querySelector('.heart-icon');
+                    const IdAccount = /*[[${AccountId}]]*/ 0;
+                    const sessionId = /*[[${sessionId}]]*/ '';
+                    const Token = /*[[${token}]]*/ '';
+                    const movieId = $("#movieId").val();
+                            
+
+                    if (this.classList.contains('active')) {
+                        removeFavorite(movieId, Token, IdAccount);
+                    } else {
+                        addFavorite(movieId, Token, IdAccount);
+                    }
+                });
+
+                function addFavorite(movieId, Token, IdAccount) {
+                    // 🔺 Agregar a favoritos
+
+
+                    $.ajax({
+                        url: `https://api.themoviedb.org/3/account/${IdAccount}/favorite`,
+                        method: 'POST',
+                        contentType: 'application/json;charset=utf-8',
+                        dataType: 'json',
+                        headers: {"Authorization": `Bearer ${Token}`},
+                        data: JSON.stringify({
+                            media_type: "movie",
+                            media_id: movieId,
+                            favorite: true
+                        }),
+                        success: function (data) {
+                            console.log("Agregado a favoritos:", data);
+                        },
+                        error: function (xhr) {
+                            console.error("Error al marcar favorito:", xhr.responseText);
+                        }
+                    });
+                }
+                function removeFavorite(movieId, Token, IdAccount) {
+                    // 🔻 Quitar de favoritos
+                    $.ajax({
+                        url: `https://api.themoviedb.org/3/movie/${movieId}?language=es-MX`,
+                        method: 'GET',
+                        dataType: 'json',
+                        headers: {"Authorization": `Bearer ${Token}`},
+                        success: function (data) {
+                            console.log("Detalle película removida:", data);
+                        }
+                    });
+                    // Aquí harías el DELETE de favoritos (TMDB solo permite update con POST, usando favorite: false)
+                    $.ajax({
+                        url: `https://api.themoviedb.org/3/account/${IdAccount}/favorite`,
+                        method: 'POST',
+                        contentType: 'application/json;charset=utf-8',
+                        headers: {"Authorization": `Bearer ${Token}`},
+                        data: JSON.stringify({
+                            media_type: "movie",
+                            media_id: movieId,
+                            favorite: false
+                        }),
+                        success: function (data) {
+                            console.log("Eliminado de favoritos:", data);
+                        },
+                        error: function (xhr) {
+                            console.error("Error al eliminar:", xhr.responseText);
+                        }
+                    });
+                }
                 function loadMovieDetails(IdMovie) {
                     const Token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwOTg2ZmY4NzM0Y2YyMDI4NWFkNzBiNjJlODZmYzY0NSIsIm5iZiI6MTc1NzcwMzIyNC45NTcsInN1YiI6IjY4YzQ2YzM4YTlmYjViODI3NjhkNzNjYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.H8LWQFVeOAKNZZ00HhZCIYChFfrsT3_paRZZpevGlu8";
                     $.ajax({
@@ -313,6 +332,7 @@
                         headers: {"Authorization": `Bearer ${Token}`},
                         success: function (data) {
                             const posterBase = "https://image.tmdb.org/t/p/w500";
+                            $('#movieId').val(data.id);
                             $('#modalTitle').text(data.title);
                             $('#modalOverview').text(data.overview || 'Sin descripción disponible');
                             $('#modalPoster').attr('src', data.poster_path ? posterBase + data.poster_path : '/default-poster.png');

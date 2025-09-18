@@ -209,59 +209,154 @@
                 overflow: hidden;
             }
         </style>
-        <script>
+       <script th:inline="javascript">
+                document.querySelectorAll('.heart-btn').forEach(btn => {
+                    btn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
 
-            $(document).on("click", ".btnIdMovie", function () {
-                const IdMovie = $(this).data("movie-id");
-                console.log(IdMovie);
-                $('#movieModal').removeClass('hidden');
+                        const heartIcon = this.querySelector('.heart-icon');
+                        const movieId = this.dataset.movieId;
+                        const IdAccount = /*[[${AccountId}]]*/ 0;
+                        const sessionId = /*[[${sessionId}]]*/ '';
+                        const Token = /*[[${token}]]*/ '';
 
-                loadMovieDetails(IdMovie);
-            });
-
-            function loadMovieDetails(IdMovie) {
-                const Token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwOTg2ZmY4NzM0Y2YyMDI4NWFkNzBiNjJlODZmYzY0NSIsIm5iZiI6MTc1NzcwMzIyNC45NTcsInN1YiI6IjY4YzQ2YzM4YTlmYjViODI3NjhkNzNjYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.H8LWQFVeOAKNZZ00HhZCIYChFfrsT3_paRZZpevGlu8";
-                $.ajax({
-                    url: `https://api.themoviedb.org/3/movie/${IdMovie}?language=es-MX`,
-                    method: 'GET',
-                    dataType: 'json',
-                    headers: {"Authorization": `Bearer ${Token}`},
-                    success: function (data) {
-                        const posterBase = "https://image.tmdb.org/t/p/w500";
-
-                        $('#modalTitle').text(data.title);
-                        $('#modalOverview').text(data.overview || 'Sin descripción disponible');
-                        $('#modalPoster').attr('src', data.poster_path ? posterBase + data.poster_path : '/default-poster.png');
-                        $('#modalRating').text(data.vote_average.toFixed(1));
-                        $('#modalReleaseDate').text(data.release_date || 'N/A');
-                        $('#modalVoteCount').text(data.vote_count.toLocaleString());
-                        $('#modalLanguage').text(data.original_language.toUpperCase());
-                        $('#modalPopularity').text(data.popularity.toFixed(1));
-                        $('#modalGenres').text(data.genres ? data.genres.map(g => g.name).join(', ') : 'N/A');
-                        $('#modalCollection').text(data.belongs_to_collection ? data.belongs_to_collection.name : 'Ninguna');
-
-                        if (data.homepage) {
-                            $('#modalHomepage').attr('href', data.homepage).removeClass('hidden');
+                        if (this.classList.contains('active')) {
+                            this.classList.remove('active', 'bg-pink-500', 'bg-opacity-90', 'scale-110');
+                            this.classList.add('bg-black', 'bg-opacity-50');
+                            heartIcon.setAttribute('fill', 'none');
+                            heartIcon.setAttribute('stroke', 'currentColor');
+                            heartIcon.classList.remove('text-white');
+                            heartIcon.classList.add('text-white', 'hover:text-pink-500');
+                            removeFavorite(movieId, Token, IdAccount);
                         } else {
-                            $('#modalHomepage').addClass('hidden');
+                            this.classList.add('active', 'bg-pink-500', 'bg-opacity-90', 'scale-110');
+                            this.classList.remove('bg-black', 'bg-opacity-50');
+                            heartIcon.setAttribute('fill', 'currentColor');
+                            heartIcon.removeAttribute('stroke');
+                            heartIcon.classList.remove('hover:text-pink-500');
+                            heartIcon.classList.add('text-white');
+                            addFavorite(movieId, Token, IdAccount);
                         }
+                    });
+                });
 
-                        // Abrir modal
-                        $('#movieModal').removeClass('hidden');
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error al cargar los detalles:', error);
-                        $('#modalTitle').text('Error');
-                        $('#modalOverview').text('No se pudieron cargar los detalles.');
+
+                $(document).on("click", ".btnIdMovie", function () {
+                    const IdMovie = $(this).data("movie-id");
+                    console.log(IdMovie);
+                    $('#movieModal').removeClass('hidden');
+                    loadMovieDetails(IdMovie);
+                });
+
+                $(document).on("click", ".heart-btn-modal", function () {
+                    const heartIcon = this.querySelector('.heart-icon');
+                    const IdAccount = /*[[${AccountId}]]*/ 0;
+                    const sessionId = /*[[${sessionId}]]*/ '';
+                    const Token = /*[[${token}]]*/ '';
+                    const movieId = $("#movieId").val();
+                            
+
+                    if (this.classList.contains('active')) {
+                        removeFavorite(movieId, Token, IdAccount);
+                    } else {
+                        addFavorite(movieId, Token, IdAccount);
                     }
                 });
 
-                $('#closeModal, #modalOverlay').click(function () {
-                    $('#movieModal').addClass('hidden');
-                });
+                function addFavorite(movieId, Token, IdAccount) {
+                    // 🔺 Agregar a favoritos
 
-            }
-        </script>
+
+                    $.ajax({
+                        url: `https://api.themoviedb.org/3/account/${IdAccount}/favorite`,
+                        method: 'POST',
+                        contentType: 'application/json;charset=utf-8',
+                        dataType: 'json',
+                        headers: {"Authorization": `Bearer ${Token}`},
+                        data: JSON.stringify({
+                            media_type: "movie",
+                            media_id: movieId,
+                            favorite: true
+                        }),
+                        success: function (data) {
+                            console.log("Agregado a favoritos:", data);
+                        },
+                        error: function (xhr) {
+                            console.error("Error al marcar favorito:", xhr.responseText);
+                        }
+                    });
+                }
+                function removeFavorite(movieId, Token, IdAccount) {
+                    // 🔻 Quitar de favoritos
+                    $.ajax({
+                        url: `https://api.themoviedb.org/3/movie/${movieId}?language=es-MX`,
+                        method: 'GET',
+                        dataType: 'json',
+                        headers: {"Authorization": `Bearer ${Token}`},
+                        success: function (data) {
+                            console.log("Detalle película removida:", data);
+                        }
+                    });
+                    // Aquí harías el DELETE de favoritos (TMDB solo permite update con POST, usando favorite: false)
+                    $.ajax({
+                        url: `https://api.themoviedb.org/3/account/${IdAccount}/favorite`,
+                        method: 'POST',
+                        contentType: 'application/json;charset=utf-8',
+                        headers: {"Authorization": `Bearer ${Token}`},
+                        data: JSON.stringify({
+                            media_type: "movie",
+                            media_id: movieId,
+                            favorite: false
+                        }),
+                        success: function (data) {
+                            console.log("Eliminado de favoritos:", data);
+                        },
+                        error: function (xhr) {
+                            console.error("Error al eliminar:", xhr.responseText);
+                        }
+                    });
+                }
+                function loadMovieDetails(IdMovie) {
+                    const Token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwOTg2ZmY4NzM0Y2YyMDI4NWFkNzBiNjJlODZmYzY0NSIsIm5iZiI6MTc1NzcwMzIyNC45NTcsInN1YiI6IjY4YzQ2YzM4YTlmYjViODI3NjhkNzNjYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.H8LWQFVeOAKNZZ00HhZCIYChFfrsT3_paRZZpevGlu8";
+                    $.ajax({
+                        url: `https://api.themoviedb.org/3/movie/${IdMovie}?language=es-MX`,
+                        method: 'GET',
+                        dataType: 'json',
+                        headers: {"Authorization": `Bearer ${Token}`},
+                        success: function (data) {
+                            const posterBase = "https://image.tmdb.org/t/p/w500";
+                            $('#movieId').val(data.id);
+                            $('#modalTitle').text(data.title);
+                            $('#modalOverview').text(data.overview || 'Sin descripción disponible');
+                            $('#modalPoster').attr('src', data.poster_path ? posterBase + data.poster_path : '/default-poster.png');
+                            $('#modalRating').text(data.vote_average.toFixed(1));
+                            $('#modalReleaseDate').text(data.release_date || 'N/A');
+                            $('#modalVoteCount').text(data.vote_count.toLocaleString());
+                            $('#modalLanguage').text(data.original_language.toUpperCase());
+                            $('#modalPopularity').text(data.popularity.toFixed(1));
+                            $('#modalGenres').text(data.genres ? data.genres.map(g => g.name).join(', ') : 'N/A');
+                            $('#modalCollection').text(data.belongs_to_collection ? data.belongs_to_collection.name : 'Ninguna');
+                            if (data.homepage) {
+                                $('#modalHomepage').attr('href', data.homepage).removeClass('hidden');
+                            } else {
+                                $('#modalHomepage').addClass('hidden');
+                            }
+
+                            // Abrir modal
+                            $('#movieModal').removeClass('hidden');
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error al cargar los detalles:', error);
+                            $('#modalTitle').text('Error');
+                            $('#modalOverview').text('No se pudieron cargar los detalles.');
+                        }
+                    });
+                    $('#closeModal, #modalOverlay').click(function () {
+                        $('#movieModal').addClass('hidden');
+                    });
+                }
+            </script>
     </body>
 
 </html>
